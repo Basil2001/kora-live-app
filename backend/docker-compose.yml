@@ -1,0 +1,115 @@
+# ============================================
+# Kora Backend — Docker Compose Stack
+# MySQL 8 + Redis + PHP-FPM + Nginx
+# ============================================
+
+version: '3.8'
+
+services:
+  # ─────────────── Nginx Reverse Proxy ───────────────
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: kora-nginx
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8000}:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    networks:
+      - kora-network
+
+  # ─────────────── PHP-FPM Application ───────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kora-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/99-production.ini:ro
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - kora-network
+
+  # ─────────────── MySQL 8 Database ───────────────
+  mysql:
+    image: mysql:8.0
+    container_name: kora-mysql
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD:-kora_secret}"
+      MYSQL_DATABASE: "${DB_DATABASE:-kora_db}"
+      MYSQL_USER: "${DB_USERNAME:-kora_user}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-kora_secret}"
+    volumes:
+      - kora-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kora-network
+
+  # ─────────────── Redis Cache ───────────────
+  redis:
+    image: redis:7-alpine
+    container_name: kora-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - kora-redis-data:/data
+    networks:
+      - kora-network
+
+  # ─────────────── WebSockets Server ───────────────
+  websockets:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kora-websockets
+    restart: unless-stopped
+    command: php artisan websockets:serve --host=0.0.0.0 --port=6001
+    ports:
+      - "6001:6001"
+    volumes:
+      - ./:/var/www
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - app
+      - redis
+    networks:
+      - kora-network
+
+# ─────────────── Volumes ───────────────
+volumes:
+  kora-mysql-data:
+    driver: local
+  kora-redis-data:
+    driver: local
+
+# ─────────────── Networks ───────────────
+networks:
+  kora-network:
+    driver: bridge

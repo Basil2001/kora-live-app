@@ -1,0 +1,4 @@
+storePassword=<password_from_previous_step>
+keyPassword=<password_from_previous_step>
+keyAlias=upload
+storeFile=<location_of_key_store_file>/upload-keystore.jks

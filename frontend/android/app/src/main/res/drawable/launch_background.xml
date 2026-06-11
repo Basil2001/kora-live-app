@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kora App — Premium Dark Splash Screen -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Dark background matching AppTheme.darkBackground (#0B0E11) -->
+    <item android:drawable="@color/kora_splash_bg" />
+</layer-list>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "651674886522",
+    "project_id": "koralive-pro-x7b4",
+    "storage_bucket": "koralive-pro-x7b4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651674886522:android:bf29a51cf977f16145f6c3",
+        "android_client_info": {
+          "package_name": "com.koralive.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVSLYxTKN8bZuxY6ZlT6v4nK6y8PkFjdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

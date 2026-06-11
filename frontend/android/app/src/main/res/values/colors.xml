@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Kora brand colors for native Android splash -->
+    <color name="kora_splash_bg">#FF0B0E11</color>
+    <color name="kora_accent_green">#FF00E676</color>
+</resources>

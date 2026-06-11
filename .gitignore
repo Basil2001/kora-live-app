@@ -1,0 +1,21 @@
+# PHP / Laravel ignores
+backend/vendor/
+backend/.env
+backend/bootstrap/cache/*.php
+backend/storage/framework/cache/data/*
+backend/storage/framework/views/*.php
+backend/storage/framework/sessions/*
+backend/storage/framework/testing/*
+backend/storage/logs/*.log
+backend/public/storage
+
+# Flutter / Dart ignores
+frontend/.dart_tool/
+frontend/.flutter-plugins-dependencies
+frontend/.pub-cache/
+frontend/.pub/
+frontend/build/
+frontend/android/app/debug/
+frontend/android/app/profile/
+frontend/android/app/release/
+frontend/ios/Flutter/.last_build_id
