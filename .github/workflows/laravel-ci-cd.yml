@@ -35,7 +35,7 @@ jobs:
     - name: Install Dependencies
       working-directory: ./backend
       run: |
-        composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
+        composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader --ignore-platform-reqs
 
     - name: Copy env template for testing
       working-directory: ./backend
